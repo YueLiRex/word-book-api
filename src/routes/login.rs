@@ -1,39 +1,37 @@
 use axum::{
     extract,
     routing::post,
-    routing::get,
     Router,
     Json,
 };
-use serde::Deserialize;
-use serde::Serialize;
+use chrono::Utc;
 use uuid::Uuid;
-use crate::routes::http_models::RegisterUserRequest;
-use crate::routes::http_models::ResponseEntity;
+use crate::routes::http_models::{
+    RegisterUserRequest,
+    ResponseEntity,
+    FindPasswordForm,
+    Message,
+};
+use crate::database::prelude::*;
+use crate::database::user;
 
-#[derive(Serialize)]
-struct User {
-    id: Uuid,
-    username: String,
-}
-
-#[derive(Deserialize, Debug)]
-struct FindPasswordForm {
-    email: String,
-}
-
-#[derive(Serialize)]
-struct Message {
-    code: i32,
-    message: String,
-}
-
-async fn register_user(extract::Json(RegisterUserRequest { email, password }): extract::Json<RegisterUserRequest>) -> Json<ResponseEntity<User>> {
+async fn register_user(extract::Json(RegisterUserRequest { email, password }): extract::Json<RegisterUserRequest>) -> Json<ResponseEntity<user::Model>> {
     // payload is a `CreateUser`
     if email == "secret#test.com" {
-        Json(ResponseEntity { code: 1, message: format!("Register user success! {email}"), response: Some(User { id: Uuid::new_v4(), username: email })})
+        Json(
+            ResponseEntity { 
+                code: 1, 
+                message: format!("Register user success! {email}"), 
+                response: Some(user::Model {
+                    id: Uuid::new_v4(), 
+                    email: email, 
+                    password: "masked".to_owned(), 
+                    created_at: Utc::now().naive_utc(),
+                    updated_at: Utc::now().naive_utc(),   
+                })
+            })
     } else {
-        Json(ResponseEntity { code: 1, message: format!("Register user success! {email}"), response: None})
+        Json(ResponseEntity { code: 0, message: format!("Wrong email received {email}"), response: None})
     }
 }
 

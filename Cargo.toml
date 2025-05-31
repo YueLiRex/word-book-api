@@ -3,16 +3,22 @@ name = "simple_blog"
 version = "0.1.0"
 edition = "2021"
 
+[workspace]
+members = [".", "migration"]
+
 [dependencies]
 tokio = { version = "1.45.1", features = ["full"] }
 tower = { version = "0.5.2", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1.0.219", features = ["derive"] }
 uuid = {version = "1.17.0", features = ["v4", "serde"]}
-reqwest = { version = "0.12.15", features = ["json"] }
+reqwest = { version = "0.12.18", features = ["json"] }
 chrono = { version = "0.4.41", features = ["serde", "clock"] }
+sea-orm = { version = "1.1.12", features = [ "sqlx-postgres", "runtime-tokio-native-tls", "macros" ] }
 
 axum = "0.8.4"
-serde_json = "1.0"
+serde_json = "1.0.140"
 anyhow = "1.0.98"
 jsonwebtoken = "9.3.1"
+dotenvy = "0.15.7"
+migration = { path = "migration" }
 

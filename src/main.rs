@@ -1,15 +1,33 @@
-use std::net::SocketAddr;
+use std::{env, net::SocketAddr};
 
 use axum::Router;
+use sea_orm::{ConnectionTrait, Database};
+use migration::{Migrator, MigratorTrait};
 
 mod routes;
+mod database;
 
 #[tokio::main]
 async fn main() {
 
-    let app = Router::new()
-    .merge(routes::login_route());
+    unsafe {
+        env::set_var("RUST_LOG", "debug");
+    }
 
+    dotenvy::dotenv().ok();
+    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
+    
+    let conn = Database::connect(db_url)
+        .await
+        .expect("Database connection failed");
+
+    Migrator::up(&conn, None).await.unwrap();
+
+    //==================================================================
+
+    let app = Router::new()
+    .merge(routes::login_route())
+    .merge(routes::article_route());
 
     // Get the port number from the environment, default to 3000
     let port: u16 = std::env::var("PORT")

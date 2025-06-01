@@ -1,3 +1,5 @@
+use std::str;
+
 use serde::Deserialize;
 use serde::Serialize;
 use uuid::Uuid;
@@ -13,6 +15,11 @@ pub struct ResponseEntity<T> {
 pub struct RegisterUserRequest {
     pub email: String,
     pub password: String,
+}
+
+pub struct LoginRequest {
+    pub email: String,
+    pub password: String
 }
 
 #[derive(Deserialize, Debug)]

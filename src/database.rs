@@ -1,4 +1,4 @@
 pub mod prelude;
 
-pub mod article;
-pub mod user;
+pub mod words;
+pub mod users;

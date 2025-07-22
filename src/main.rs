@@ -28,7 +28,7 @@ async fn main() {
 
     let state = AppState{ conn };
 
-    let app = Router::new().merge(routes::login_route());
+    let app = Router::new().merge(routes::login_route()).merge(routes::words_route());
 
     // Get the port number from the environment, default to 3000
     let port: u16 = std::env::var("PORT")

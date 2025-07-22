@@ -35,6 +35,6 @@ pub struct Message {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct CreateArticleRequest {
-    pub title: String,
+pub struct CreateWrodsRequest {
+    pub word: Vec<String>,
 }

@@ -2,7 +2,6 @@ use std::{env, net::SocketAddr};
 
 use axum::Router;
 use sea_orm::{ Database, DatabaseConnection};
-use migration::{Migrator, MigratorTrait};
 
 mod routes;
 mod database;
@@ -29,8 +28,9 @@ async fn main() {
     let state = AppState{ conn };
 
     let app = Router::new()
-    .merge(routes::words_route()).with_state(state)
-    .merge(routes::login_route());
+    .merge(routes::words_route())
+    .merge(routes::login_route())
+    .with_state(state);
 
     // Get the port number from the environment, default to 3000
     let port: u16 = std::env::var("PORT")

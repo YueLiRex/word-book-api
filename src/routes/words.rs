@@ -7,8 +7,8 @@ use chrono::Utc;
 use sea_orm::{ActiveModelTrait, ActiveValue::{NotSet, Set}, DatabaseConnection, DbConn, EntityTrait, TryIntoModel};
 use uuid::Uuid;
 
-
-use crate::{database::prelude::*, AppState};
+use crate::AppState;
+use crate::database::prelude::*;
 
 use crate::database::words;
 
@@ -49,6 +49,8 @@ async fn get_words(State(state): State<AppState>) -> Json<ResponseEntity<Vec<wor
     }
   )
 }
+
+
 
 
 pub fn words_route() -> Router<AppState> {

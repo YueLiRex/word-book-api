@@ -42,6 +42,8 @@ async fn main() {
     let address = SocketAddr::from(([0, 0, 0, 0, 0, 0, 0, 0], port));
     let listener = tokio::net::TcpListener::bind(&address).await.unwrap();
 
+    println!("Application running on {}", listener.local_addr().unwrap());
+
     // Run the app with hyper, listening on the specified address
     axum::serve(listener, app).await.unwrap();
 }

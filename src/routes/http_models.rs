@@ -37,4 +37,10 @@ pub struct Message {
 #[derive(Deserialize, Debug)]
 pub struct CreateWrodsRequest {
     pub wordList: Vec<String>,
+    pub userId: Uuid,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct GetWordsRequest {
+    pub userId: Uuid,
 }

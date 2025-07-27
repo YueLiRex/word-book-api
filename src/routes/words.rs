@@ -1,26 +1,27 @@
-use std::{ops::Not, result};
+use std::{ops::Not, result, str::FromStr};
 
 use axum::{
     extract::{self, State}, routing::{delete, get, post, put}, Json, Router
 };
 use chrono::Utc;
-use sea_orm::{ActiveModelTrait, ActiveValue::{NotSet, Set}, DatabaseConnection, DbConn, EntityTrait, TryIntoModel};
+use sea_orm::{ActiveModelTrait, ActiveValue::{NotSet, Set}, ColumnTrait, DatabaseConnection, DbConn, EntityTrait, QueryFilter, TryIntoModel};
 use uuid::Uuid;
 
-use crate::AppState;
+use crate::{routes::http_models::GetWordsRequest, AppState};
 use crate::database::prelude::*;
 
 use crate::database::words;
 
 use super::http_models::{CreateWrodsRequest, ResponseEntity};
 
-async fn add_words(State(state): State<AppState>, Json(CreateWrodsRequest { wordList }): Json<CreateWrodsRequest>) -> Json<ResponseEntity<words::Model>> {
+async fn add_words(State(state): State<AppState>, Json(CreateWrodsRequest { wordList, userId }): Json<CreateWrodsRequest>) -> Json<ResponseEntity<words::Model>> {
 
   let records: Vec<words::ActiveModel> = wordList.into_iter().map(|word| {
     words::ActiveModel {
       id: NotSet,
       word: Set(word),
       is_selected: Set(false),
+      user_id: Set(userId),
       created_at: Set(Utc::now().naive_utc()),
       updated_at: Set(Utc::now().naive_utc()),
     }
@@ -39,8 +40,12 @@ async fn add_words(State(state): State<AppState>, Json(CreateWrodsRequest { word
   )
 }
 
-async fn get_words(State(state): State<AppState>) -> Json<ResponseEntity<Vec<words::Model>>> {
-  let records = words::Entity::find().all(&state.conn).await.unwrap();
+async fn get_words(State(state): State<AppState>, Json(GetWordsRequest { userId }): Json<GetWordsRequest>) -> Json<ResponseEntity<Vec<words::Model>>> {
+  let records = Words::find()
+    .filter(words::Column::UserId.eq(userId))
+    .all(&state.conn)
+    .await.unwrap();
+
   Json(
     ResponseEntity {
       code: 1,
@@ -49,9 +54,6 @@ async fn get_words(State(state): State<AppState>) -> Json<ResponseEntity<Vec<wor
     }
   )
 }
-
-
-
 
 pub fn words_route() -> Router<AppState> {
   Router::new()

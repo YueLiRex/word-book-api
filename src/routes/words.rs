@@ -34,8 +34,9 @@ async fn add_words(State(state): State<AppState>, Json(CreateWrodsRequest { word
   Json(
     ResponseEntity {
       code: 1,
+      success: true,
       message: format!("Saved {:?} words.", result),
-      response: None,
+      data: None,
     }
   )
 }
@@ -49,8 +50,9 @@ async fn get_words(State(state): State<AppState>, Json(GetWordsRequest { userId 
   Json(
     ResponseEntity {
       code: 1,
+      success: true,
       message: format!("Found {} words.", records.len()),
-      response: Some(records),
+      data: Some(records),
     }
   )
 }

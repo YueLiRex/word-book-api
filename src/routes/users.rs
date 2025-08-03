@@ -28,8 +28,9 @@ async fn register_user(State(state): State<AppState>, extract::Json(RegisterUser
     Json(
         ResponseEntity {
             code: 1,
+            success: true,
             message: "User registered successfully".to_string(),
-            response: Some(result),
+            data: Some(result),
         }
     )
 }
@@ -46,21 +47,24 @@ async fn login(State(state): State<AppState>,  extract::Json(LoginRequest { emai
         if user.password == password {
             Json(ResponseEntity {
                 code: 1,
+                success: true,
                 message: "Login successful".to_string(),
-                response: Some(user),
+                data: Some(user),
             })
         } else {
             Json(ResponseEntity {
                 code: 0,
+                success: false,
                 message: "Invalid password".to_string(),
-                response: None,
+                data: None,
             })
         }
     } else {
         Json(ResponseEntity {
             code: 0,
+            success: false,
             message: "User not found".to_string(),
-            response: None,
+            data: None,
         })
     }
 }

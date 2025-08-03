@@ -1,5 +1,6 @@
 use std::str;
 
+use chrono::Date;
 use serde::Deserialize;
 use serde::Serialize;
 use uuid::Uuid;
@@ -7,8 +8,9 @@ use uuid::Uuid;
 #[derive(Serialize)]
 pub struct ResponseEntity<T> {
     pub code: i32,
+    pub success: bool,
     pub message: String,
-    pub response: Option<T>
+    pub data: Option<T>
 }
 
 #[derive(Deserialize)]
@@ -21,6 +23,17 @@ pub struct RegisterUserRequest {
 pub struct LoginRequest {
     pub email: String,
     pub password: String
+}
+
+pub struct LoginResponse {
+    pub avatar: String,
+    pub email: String,
+    pub nickname: String,
+    pub roles: Vec<String>,
+    pub permissions: Vec<String>,
+    pub accessToken: String,
+    pub refreshToken: String,
+    pub expres: chrono::Utc,
 }
 
 #[derive(Deserialize, Debug)]

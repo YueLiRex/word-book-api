@@ -1,5 +1,5 @@
 [package]
-name = "word_reading"
+name = "word-book-api"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,16 +7,16 @@ edition = "2021"
 members = [".", "migration"]
 
 [dependencies]
-tokio = { version = "1.46.1", features = ["full"] }
+tokio = { version = "1.47.1", features = ["full"] }
 tower = { version = "0.5.2", features = ["full"] }
 serde = { version = "1.0.219", features = ["derive"] }
 uuid = {version = "1.17.0", features = ["v4", "serde"]}
 reqwest = { version = "0.12.22", features = ["json"] }
 chrono = { version = "0.4.41", features = ["serde", "clock"] }
-sea-orm = { version = "1.1.13", features = [ "sqlx-postgres", "runtime-tokio-native-tls", "macros" ] }
+sea-orm = { version = "1.1.14", features = [ "sqlx-postgres", "runtime-tokio-native-tls", "macros" ] }
 
 axum = "0.8.4"
-serde_json = "1.0.141"
+serde_json = "1.0.142"
 anyhow = "1.0.98"
 jsonwebtoken = "9.3.1"
 dotenvy = "0.15.7"

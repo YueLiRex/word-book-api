@@ -6,12 +6,12 @@ use serde::Serialize;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize)]
 #[sea_orm(table_name = "users")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false)]
-    pub id: Uuid,
-    pub email: String,
-    pub password: String,
-    pub created_at: DateTime,
-    pub updated_at: DateTime,
+  #[sea_orm(primary_key, auto_increment = false)]
+  pub id: Uuid,
+  pub email: String,
+  pub password: String,
+  pub created_at: DateTime,
+  pub updated_at: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

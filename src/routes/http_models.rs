@@ -1,8 +1,7 @@
 use std::str;
 
-use chrono::Date;
-use serde::Deserialize;
-use serde::Serialize;
+use chrono::prelude::*;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 #[derive(Serialize)]
@@ -25,6 +24,7 @@ pub struct LoginRequest {
   pub password: String,
 }
 
+#[derive(Serialize)]
 pub struct LoginResponse {
   pub avatar: String,
   pub email: String,
@@ -33,7 +33,7 @@ pub struct LoginResponse {
   pub permissions: Vec<String>,
   pub accessToken: String,
   pub refreshToken: String,
-  pub expres: chrono::Utc,
+  pub expres: DateTime<Utc>,
 }
 
 #[derive(Deserialize, Debug)]

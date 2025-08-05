@@ -36,6 +36,12 @@ pub struct LoginResponse {
   pub expres: DateTime<Utc>,
 }
 
+#[derive(Serialize)]
+pub struct WordsResponse {
+  pub words: Vec<String>,
+  pub size: i32,
+}
+
 #[derive(Deserialize, Debug)]
 pub struct FindPasswordForm {
   pub email: String,
@@ -43,7 +49,6 @@ pub struct FindPasswordForm {
 
 #[derive(Serialize)]
 pub struct Message {
-  pub code: i32,
   pub message: String,
 }
 

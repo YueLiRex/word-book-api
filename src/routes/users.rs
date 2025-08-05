@@ -116,7 +116,6 @@ async fn login(
 
 async fn find_password(extract::Form(FindPasswordForm { email }): extract::Form<FindPasswordForm>) -> Json<Message> {
   Json(Message {
-    code: 1,
     message: format!("Success, we send an email to {email}"),
   })
 }

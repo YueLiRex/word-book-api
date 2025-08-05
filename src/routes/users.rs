@@ -17,7 +17,7 @@ use uuid::Uuid;
 async fn register_user(
   State(state): State<AppState>,
   extract::Json(RegisterUserRequest { email, password }): extract::Json<RegisterUserRequest>,
-) -> Json<ResponseEntity<users::Model>> {
+) -> Json<ResponseEntity<LoginResponse>> {
   let userId = Uuid::new_v4();
   let user = users::ActiveModel {
     id: Set(userId),
@@ -38,15 +38,41 @@ async fn register_user(
     updated_at: Set(Utc::now().naive_utc()),
   };
 
-  let userResult = user.insert(&state.conn).await.unwrap();
-  let profileResult = profile.insert(&state.conn).await.unwrap();
+  let userResult = user.insert(&state.conn).await;
+  let profileResult = profile.insert(&state.conn).await;
 
-  Json(ResponseEntity {
-    code: 1,
-    success: true,
-    message: "User registered successfully".to_string(),
-    data: Some(userResult),
-  })
+  match (userResult, profileResult) {
+    (Ok(user), Ok(profile)) => {
+      // Successfully created user and profile
+      let loginResponse = LoginResponse {
+        avatar: profile.avatar,
+        email: user.email.clone(),
+        nickname: profile.nickname,
+        roles: profile.roles.split(",").map(|s| s.to_string()).collect(),
+        permissions: profile.permissions.split(",").map(|s| s.to_string()).collect(),
+        accessToken: "dummy_access_token".to_string(),
+        refreshToken: "dummy_refresh_token".to_string(),
+        expres: Utc::now() + chrono::Duration::days(7),
+      };
+
+      Json(ResponseEntity {
+        code: 1,
+        success: true,
+        message: "User registered successfully".to_string(),
+        data: Some(loginResponse),
+      })
+    }
+    (Err(e), _) | (_, Err(e)) => {
+      // Handle error
+      println!("Error creating user or profile: {}", e);
+      return Json(ResponseEntity {
+        code: 0,
+        success: false,
+        message: "Failed to register user".to_string(),
+        data: None,
+      });
+    }
+  }
 }
 
 async fn login(
@@ -62,7 +88,7 @@ async fn login(
 
   match userWithProfile {
     Some((user, Some(profile))) if user.password == password => {
-      let login_response = LoginResponse {
+      let loginResponse = LoginResponse {
         avatar: profile.avatar,
         email: user.email.clone(),
         nickname: profile.nickname,
@@ -76,7 +102,7 @@ async fn login(
         code: 1,
         success: true,
         message: "Login successful".to_string(),
-        data: Some(login_response),
+        data: Some(loginResponse),
       })
     }
     _ => Json(ResponseEntity {

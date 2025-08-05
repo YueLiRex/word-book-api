@@ -1,10 +1,8 @@
 use crate::database::prelude::*;
-use crate::database::users;
 use crate::database::profiles;
+use crate::database::users;
 use crate::routes::http_models::LoginResponse;
-use crate::routes::http_models::{
-  FindPasswordForm, LoginRequest, Message, RegisterUserRequest, ResponseEntity,
-};
+use crate::routes::http_models::{FindPasswordForm, LoginRequest, Message, RegisterUserRequest, ResponseEntity};
 use crate::AppState;
 use axum::{
   extract::{self, State},
@@ -13,11 +11,7 @@ use axum::{
 };
 use chrono::Utc;
 use sea_orm::ActiveValue::NotSet;
-use sea_orm::{
-  ActiveModelTrait,
-  ActiveValue::Set,
-  ColumnTrait, EntityTrait, QueryFilter,
-};
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, ColumnTrait, EntityTrait, QueryFilter};
 use uuid::Uuid;
 
 async fn register_user(
@@ -59,7 +53,8 @@ async fn login(
   State(state): State<AppState>,
   extract::Json(LoginRequest { email, password }): extract::Json<LoginRequest>,
 ) -> Json<ResponseEntity<LoginResponse>> {
-  let userWithProfile = Users::find().find_also_related(Profiles)
+  let userWithProfile = Users::find()
+    .find_also_related(Profiles)
     .filter(users::Column::Email.eq(email))
     .one(&state.conn)
     .await
@@ -90,13 +85,10 @@ async fn login(
       message: "Invalid email or password".to_string(),
       data: None,
     }),
-      
   }
 }
 
-async fn find_password(
-  extract::Form(FindPasswordForm { email }): extract::Form<FindPasswordForm>,
-) -> Json<Message> {
+async fn find_password(extract::Form(FindPasswordForm { email }): extract::Form<FindPasswordForm>) -> Json<Message> {
   Json(Message {
     code: 1,
     message: format!("Success, we send an email to {email}"),

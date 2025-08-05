@@ -36,10 +36,7 @@ async fn add_words(
     })
     .collect();
 
-  let result = words::Entity::insert_many(records)
-    .exec(&state.conn)
-    .await
-    .unwrap();
+  let result = words::Entity::insert_many(records).exec(&state.conn).await.unwrap();
 
   Json(ResponseEntity {
     code: 1,

@@ -5,8 +5,8 @@ use std::{env, net::SocketAddr};
 
 use axum::Router;
 use sea_orm::{Database, DatabaseConnection};
-use tracing_subscriber::filter::LevelFilter;
 use tower_http::cors::CorsLayer;
+use tracing_subscriber::filter::LevelFilter;
 
 #[derive(Clone)]
 struct AppState {
@@ -15,16 +15,12 @@ struct AppState {
 
 #[tokio::main]
 async fn main() {
-  tracing_subscriber::fmt()
-    .with_max_level(LevelFilter::DEBUG)
-    .init();
+  tracing_subscriber::fmt().with_max_level(LevelFilter::DEBUG).init();
 
   dotenvy::dotenv().ok();
   let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
 
-  let conn: DatabaseConnection = Database::connect(db_url)
-    .await
-    .expect("Database connection failed");
+  let conn: DatabaseConnection = Database::connect(db_url).await.expect("Database connection failed");
 
   let state = AppState { conn };
 

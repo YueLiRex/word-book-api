@@ -42,6 +42,19 @@ pub struct WordsResponse {
   pub size: i32,
 }
 
+#[derive(Serialize)]
+pub struct Summary {
+  pub name: String,
+  pub count: i32,
+}
+
+#[derive(Serialize)]
+pub struct SummaryResponse {
+  pub wordsSummary: Summary,
+  pub finishedSummary: Summary,
+}
+
+
 #[derive(Deserialize, Debug)]
 pub struct FindPasswordForm {
   pub email: String,

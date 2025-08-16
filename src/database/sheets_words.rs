@@ -3,30 +3,32 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "users")]
+#[sea_orm(table_name = "sheets_words")]
 pub struct Model {
-  #[sea_orm(primary_key, auto_increment = false)]
-  pub id: Uuid,
-  pub email: String,
-  pub password: String,
-  pub created_at: DateTime,
-  pub updated_at: DateTime,
+  #[sea_orm(primary_key)]
+  pub id: i32,
+  pub sheet_id: i32,
+  pub word_id: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-  #[sea_orm(has_many = "super::profiles::Entity")]
-  Profiles,
-  #[sea_orm(has_many = "super::sheets::Entity")]
+  #[sea_orm(
+    belongs_to = "super::sheets::Entity",
+    from = "Column::SheetId",
+    to = "super::sheets::Column::Id",
+    on_update = "NoAction",
+    on_delete = "Cascade"
+  )]
   Sheets,
-  #[sea_orm(has_many = "super::words::Entity")]
+  #[sea_orm(
+    belongs_to = "super::words::Entity",
+    from = "Column::WordId",
+    to = "super::words::Column::Id",
+    on_update = "NoAction",
+    on_delete = "Cascade"
+  )]
   Words,
-}
-
-impl Related<super::profiles::Entity> for Entity {
-  fn to() -> RelationDef {
-    Relation::Profiles.def()
-  }
 }
 
 impl Related<super::sheets::Entity> for Entity {

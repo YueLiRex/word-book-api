@@ -3,5 +3,7 @@
 pub mod prelude;
 
 pub mod profiles;
+pub mod sheets;
+pub mod sheets_words;
 pub mod users;
 pub mod words;

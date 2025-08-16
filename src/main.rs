@@ -27,6 +27,7 @@ async fn main() {
   let app = Router::new()
     .merge(routes::words_route())
     .merge(routes::login_route())
+    .merge(routes::sheets_route())
     .with_state(state);
 
   // Get the port number from the environment, default to 3000

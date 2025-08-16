@@ -1,6 +1,7 @@
 use std::str;
 
 use chrono::prelude::*;
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -55,7 +56,7 @@ pub struct SummaryResponse {
 }
 
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize)]
 pub struct FindPasswordForm {
   pub email: String,
 }
@@ -65,13 +66,45 @@ pub struct Message {
   pub message: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize)]
+pub struct CreateSheetRequest {
+  pub userId: Uuid,
+  pub name: String,
+}
+
+#[derive(Serialize)]
+pub struct CreateSheetResponse {
+  pub id: i32,
+  pub name: String,
+  pub score: f64,
+  pub is_finished: bool,
+}
+
+#[derive(Serialize)]
+pub struct SheetResponse {
+  pub id: i32,
+  pub name: String,
+  pub score: Decimal,
+  pub is_finished: bool,
+}
+#[derive(Serialize)]
+pub struct GetSheetsResponse {
+  pub sheets: Vec<SheetResponse>,
+}
+
+#[derive(Deserialize)]
+pub struct AddWordsToSheetRequest {
+  pub sheetId: i32,
+  pub wordIds: Vec<i32>,
+}
+
+#[derive(Deserialize)]
 pub struct CreateWrodsRequest {
   pub wordList: Vec<String>,
   pub userId: Uuid,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize)]
 pub struct GetWordsRequest {
   pub userId: Uuid,
 }

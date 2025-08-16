@@ -3,16 +3,16 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "words")]
+#[sea_orm(table_name = "sheets")]
 pub struct Model {
   #[sea_orm(primary_key)]
   pub id: i32,
-  pub word: String,
-  pub is_selected: bool,
+  pub name: String,
+  pub score: Decimal,
+  pub is_finished: bool,
   pub created_at: DateTime,
   pub updated_at: DateTime,
   pub user_id: Uuid,
-  pub is_finished: Option<bool>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

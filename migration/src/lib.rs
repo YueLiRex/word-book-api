@@ -4,6 +4,7 @@ mod m20220101_000001_create_table;
 mod m20220101_000002_update_table;
 mod m20220101_000003_profile_table;
 mod m20220101_000004_update_table;
+mod m20220101_000005_word_sheet_table;
 
 pub struct Migrator;
 
@@ -15,6 +16,7 @@ impl MigratorTrait for Migrator {
       Box::new(m20220101_000002_update_table::Migration),
       Box::new(m20220101_000003_profile_table::Migration),
       Box::new(m20220101_000004_update_table::Migration),
+      Box::new(m20220101_000005_word_sheet_table::Migration),
     ]
   }
 }
